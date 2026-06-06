@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍫 你有一份專屬甜點優惠券！期限只到今天</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Pacifico&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans TC',sans-serif;background:#2c1a0e;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+
+#fake-page{width:100%;max-width:420px;padding:20px;}
+.coupon-card{background:#fff9f5;border-radius:16px;box-shadow:0 6px 32px rgba(80,30,0,.25);overflow:hidden;border:2px dashed #8b4513;}
+.coupon-header{background:linear-gradient(135deg,#4a1c00,#8b4513);padding:20px 24px 16px;text-align:center;}
+.shop-name{font-family:'Pacifico',cursive;color:#f5deb3;font-size:22px;letter-spacing:1px;margin-bottom:4px;}
+.coupon-header p{color:rgba(245,222,179,.8);font-size:13px;}
+.coupon-badge{display:inline-block;background:#f5deb3;color:#8b4513;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;margin-top:8px;letter-spacing:1px;}
+.coupon-body{padding:20px 24px;}
+.dessert-preview{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+.dessert-item{background:#fdf0e0;border-radius:10px;padding:12px 6px 8px;text-align:center;border:1px solid #e8c9a0;}
+.dessert-item .icon{font-size:28px;}
+.dessert-item .name{font-size:11px;color:#8b6343;margin-top:4px;}
+.offer-box{background:#fdf0e0;border:1px solid #e8c9a0;border-radius:10px;padding:14px 16px;margin-bottom:16px;text-align:center;}
+.offer-box .discount{font-size:36px;font-weight:700;color:#8b4513;line-height:1;}
+.offer-box .desc{font-size:13px;color:#aaa;margin-top:4px;}
+.timer-row{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:#8b4513;margin-bottom:16px;font-weight:500;}
+.claim-btn{width:100%;padding:14px;background:linear-gradient(135deg,#8b4513,#5c2d00);color:#f5deb3;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:opacity .2s,transform .1s;}
+.claim-btn:hover{opacity:.88;}
+.claim-btn:active{transform:scale(.98);}
+.fine-print{font-size:11px;color:#bbb;text-align:center;margin-top:10px;padding:0 8px 12px;}
+
+#birthday-page{display:none;position:fixed;inset:0;background:#1a0a00;z-index:999;overflow:hidden;flex-direction:column;align-items:center;justify-content:center;}
+.confetti-piece{position:absolute;border-radius:2px;animation:confettiFall linear forwards;pointer-events:none;}
+@keyframes confettiFall{0%{transform:translateY(-40px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(600deg);opacity:0;}}
+.bday-content{position:relative;z-index:10;text-align:center;padding:24px;animation:popIn .55s cubic-bezier(.36,.07,.19,.97) both;}
+@keyframes popIn{0%{transform:scale(.2) rotate(-8deg);opacity:0;}65%{transform:scale(1.08) rotate(2deg);opacity:1;}100%{transform:scale(1) rotate(0deg);}}
+.tricked-label{font-size:13px;letter-spacing:4px;color:#f5deb3;margin-bottom:8px;animation:fadeUp .4s .4s both;}
+.big-happy{font-family:'Pacifico',cursive;font-size:clamp(36px,10vw,68px);background:linear-gradient(135deg,#f6d365,#fda085,#f093fb,#f5576c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:6px;animation:fadeUp .4s .6s both;}
+.name-line{font-family:'Pacifico',cursive;font-size:clamp(28px,8vw,52px);background:linear-gradient(135deg,#ffd700,#ffaa00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;animation:fadeUp .4s .75s both;}
+.cake-emoji{font-size:56px;display:block;margin:8px 0;animation:fadeUp .4s .8s both,wobble 1.2s 1.4s ease-in-out infinite alternate;}
+@keyframes wobble{from{transform:rotate(-6deg) scale(1);}to{transform:rotate(6deg) scale(1.1);}}
+.sub-msg{color:rgba(255,255,255,.8);font-size:18px;margin-bottom:6px;animation:fadeUp .4s 1s both;}
+.rick-line{color:rgba(255,255,255,.3);font-size:13px;font-style:italic;animation:fadeUp .4s 1.2s both;}
+.replay-btn{margin-top:22px;padding:10px 26px;background:transparent;border:1.5px solid rgba(255,255,255,.3);border-radius:100px;color:rgba(255,255,255,.65);font-size:14px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:all .2s;animation:fadeUp .4s 1.4s both;}
+.replay-btn:hover{background:rgba(255,255,255,.1);color:white;border-color:rgba(255,255,255,.6);}
+.pulse-ring{position:absolute;width:160px;height:160px;border-radius:50%;border:2px solid rgba(245,222,179,.25);animation:pulseOut 2.2s ease-out infinite;pointer-events:none;}
+@keyframes pulseOut{0%{transform:scale(.5);opacity:1;}100%{transform:scale(5);opacity:0;}}
+.float-note{position:absolute;font-size:22px;animation:noteFloat linear forwards;pointer-events:none;opacity:0;}
+@keyframes noteFloat{0%{opacity:0;transform:translateY(0) scale(.6);}15%{opacity:.9;}100%{opacity:0;transform:translateY(-180px) scale(1.1);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<div id="fake-page">
+  <div class="coupon-card">
+    <div class="coupon-header">
+      <div class="shop-name">🍫 Cacao & Co.</div>
+      <p>你的專屬巧克力甜點禮券已送達</p>
+      <span class="coupon-badge">✦ 限定會員獨享 ✦</span>
+    </div>
+    <div class="coupon-body">
+      <div class="dessert-preview">
+        <div class="dessert-item"><div class="icon">🍫</div><div class="name">生巧克力</div></div>
+        <div class="dessert-item"><div class="icon">🍮</div><div class="name">巧克力布丁</div></div>
+        <div class="dessert-item"><div class="icon">🎂</div><div class="name">熔岩蛋糕</div></div>
+      </div>
+      <div class="offer-box">
+        <div class="discount">買一送一</div>
+        <div class="desc">全巧克力系列適用・限今日使用</div>
+      </div>
+      <div class="timer-row">⏰ 優惠剩餘：<span id="countdown">23:59:00</span></div>
+      <button class="claim-btn" onclick="reveal()">立即領取我的巧克力禮券 🍫</button>
+    </div>
+    <p class="fine-print">本優惠券不得與其他折扣併用。系統自動核發，每人限領一次。</p>
+  </div>
+</div>
+
+<div id="birthday-page">
+  <div class="pulse-ring" style="animation-delay:0s"></div>
+  <div class="pulse-ring" style="animation-delay:.8s"></div>
+  <div class="pulse-ring" style="animation-delay:1.6s"></div>
+  <div class="bday-content">
+    <p class="tricked-label">🎭 哈哈哈你上當了 🎭</p>
+    <div class="big-happy">生日快樂</div>
+    <div class="name-line">小馬！🐴</div>
+    <span class="cake-emoji">🎂</span>
+    <p class="sub-msg">沒有巧克力禮券啦 😂</p>
+    <p class="rick-line">♪ Never gonna give you up, never gonna let you down... ♪</p>
+    <button class="replay-btn" onclick="replayMusic()">🎵 再放一次生日歌</button>
+  </div>
+</div>
+
+<script>
+// 倒數計時
+var totalSecs=23*3600+59*60;
+setInterval(function(){
+  if(totalSecs>0) totalSecs--;
+  var h=Math.floor(totalSecs/3600),m=Math.floor((totalSecs%3600)/60),s=totalSecs%60;
+  var el=document.getElementById('countdown');
+  if(el) el.textContent=pad(h)+':'+pad(m)+':'+pad(s);
+},1000);
+function pad(n){return n.toString().padStart(2,'0');}
+
+// Web Audio — 鋼琴音色（短 Attack + 快速 Decay = 類鋼琴）
+var audioCtx=null;
+function getCtx(){if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); return audioCtx;}
+
+// BPM 140 輕快但不急躁
+var BPM=140, beat=60/BPM;
+
+// 生日快樂歌完整旋律（加了一個八度更亮）
+var melody=[
+  [523,.75],[523,.25],[587,1],[523,1],[698,1],[659,2],
+  [523,.75],[523,.25],[587,1],[523,1],[784,1],[698,2],
+  [523,.75],[523,.25],[1047,1],[880,1],[698,1],[659,1],[587,2],
+  [932,.75],[932,.25],[880,1],[698,1],[784,1],[698,3]
+];
+
+// 左手伴奏（簡單分解和弦）
+var bassNotes=[
+  [262,1],[330,1],[392,1],[330,1],
+  [262,1],[330,1],[392,1],[330,1],
+  [262,1],[330,1],[392,1],[330,1],
+  [262,1],[330,1],[392,1],[330,1],
+  [262,1],[330,1],[392,1],[330,1],
+  [262,1],[330,1],[440,1],[392,1],
+  [262,1],[330,1],[392,1],[330,1],
+  [247,1],[294,1],[440,1],[392,1],
+];
+
+function playPianoNote(ctx, freq, start, dur){
+  // 主音：鋸齒波 + 快衰減 模擬鋼琴擊弦
+  var osc1=ctx.createOscillator();
+  var osc2=ctx.createOscillator();
+  var gain=ctx.createGain();
+  osc1.connect(gain); osc2.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc1.type='sawtooth';
+  osc1.frequency.setValueAtTime(freq, start);
+  osc2.type='sine';
+  osc2.frequency.setValueAtTime(freq*2, start); // 泛音
+
+  // 鋼琴包絡：快速 attack、指數衰減
+  gain.gain.setValueAtTime(0, start);
+  gain.gain.linearRampToValueAtTime(0.3, start+0.008);
+  gain.gain.exponentialRampToValueAtTime(0.001, start+dur*beat*0.85);
+  gain.gain.setValueAtTime(0, start+dur*beat);
+
+  osc1.start(start); osc1.stop(start+dur*beat+0.1);
+  osc2.start(start); osc2.stop(start+dur*beat+0.1);
+}
+
+function playBassNote(ctx, freq, start, dur){
+  var osc=ctx.createOscillator(), g=ctx.createGain();
+  osc.connect(g); g.connect(ctx.destination);
+  osc.type='sine';
+  osc.frequency.setValueAtTime(freq, start);
+  g.gain.setValueAtTime(0, start);
+  g.gain.linearRampToValueAtTime(0.1, start+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001, start+dur*beat*0.8);
+  g.gain.setValueAtTime(0, start+dur*beat);
+  osc.start(start); osc.stop(start+dur*beat+0.05);
+}
+
+function playHappyBirthday(){
+  var ctx=getCtx();
+  var t=ctx.currentTime+0.15;
+
+  // 主旋律
+  var mt=t;
+  melody.forEach(function(n){ playPianoNote(ctx,n[0],mt,n[1]); mt+=n[1]*beat; });
+
+  // 左手分解和弦
+  var bt=t;
+  bassNotes.forEach(function(n){ playBassNote(ctx,n[0],bt,n[1]); bt+=n[1]*beat; });
+}
+
+function replayMusic(){ playHappyBirthday(); }
+
+// 彩帶（巧克力色系＋亮色）
+var cols=['#f6d365','#d4a017','#f5deb3','#f093fb','#f5576c','#4facfe','#43e97b','#ffd700','#c0392b'];
+function spawnConfetti(){
+  var bp=document.getElementById('birthday-page');
+  for(var i=0;i<100;i++){
+    (function(i){
+      setTimeout(function(){
+        var c=document.createElement('div');
+        c.className='confetti-piece';
+        c.style.left=Math.random()*100+'vw';
+        c.style.top='-20px';
+        c.style.width=(Math.random()*9+5)+'px';
+        c.style.height=(Math.random()*9+5)+'px';
+        c.style.borderRadius=Math.random()>.5?'50%':'2px';
+        c.style.background=cols[Math.floor(Math.random()*cols.length)];
+        c.style.animationDuration=(Math.random()*2.5+2)+'s';
+        c.style.animationDelay=(Math.random()*1.5)+'s';
+        bp.appendChild(c);
+        setTimeout(function(){c.remove();},6000);
+      },i*28);
+    })(i);
+  }
+}
+
+function spawnNotes(){
+  var bp=document.getElementById('birthday-page');
+  var items=['♪','♫','🎵','🎹','🍫','🎂','🍮','🐴'];
+  for(var i=0;i<20;i++){
+    (function(i){
+      setTimeout(function(){
+        var n=document.createElement('div');
+        n.className='float-note';
+        n.textContent=items[Math.floor(Math.random()*items.length)];
+        n.style.left=(5+Math.random()*90)+'vw';
+        n.style.bottom=(5+Math.random()*20)+'vh';
+        n.style.animationDuration=(Math.random()*2+2)+'s';
+        n.style.animationDelay=(Math.random()*3)+'s';
+        bp.appendChild(n);
+        setTimeout(function(){n.remove();},7000);
+      },i*160);
+    })(i);
+  }
+}
+
+function reveal(){
+  document.getElementById('fake-page').style.display='none';
+  var bp=document.getElementById('birthday-page');
+  bp.style.display='flex';
+  setTimeout(playHappyBirthday,200);
+  spawnConfetti();
+  spawnNotes();
+  setTimeout(spawnConfetti,3500);
+  setTimeout(spawnNotes,4000);
+}
+</script>
+</body>
+</html>
