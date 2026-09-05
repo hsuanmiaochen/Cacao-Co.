@@ -1,0 +1,717 @@
+<title>許願池</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f2f5f4; --surface:#ffffff; --surface-2:#e8edec; --border:#d7dedc;
+  --text:#16211f; --text-muted:#5b6a67;
+  --accent:#0e7c86; --accent-strong:#0a5f67; --accent-soft:#e3f2f1; --accent-contrast:#ffffff;
+  --gold:#a9781f; --gold-soft:#f7ecd4;
+  --st-wish-bg:#eef1f4; --st-wish-text:#51606c;
+  --st-discuss-bg:#fdf1dd; --st-discuss-text:#93590a;
+  --st-approved-bg:#e3f5ea; --st-approved-text:#146c43;
+  --st-paid-bg:#103b3d; --st-paid-text:#eafffb;
+  --st-declined-bg:#f7e9e9; --st-declined-text:#8a3a3a;
+  --cat-supplies-bg:#eef1f7; --cat-supplies-text:#3a4f7a;
+  --cat-venue-bg:#f3edf9; --cat-venue-text:#6b3fa0;
+  --cat-equip-bg:#fdf1dd; --cat-equip-text:#93590a;
+  --cat-coach-bg:#e3f2f1; --cat-coach-text:#0e7c86;
+  --cat-match-bg:#e9f5ec; --cat-match-text:#1f7a3d;
+  --cat-transport-bg:#eef1f2; --cat-transport-text:#445150;
+  --danger:#b3413d;
+  --shadow:0 1px 2px rgba(15,30,28,.06), 0 8px 24px -12px rgba(15,30,28,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1715; --surface:#16211f; --surface-2:#1d2b28; --border:#2a3835;
+    --text:#e7efed; --text-muted:#9db0ac;
+    --accent:#2bb3ac; --accent-strong:#3fcac2; --accent-soft:#173432; --accent-contrast:#06201f;
+    --gold:#e0b155; --gold-soft:#2e2412;
+    --st-wish-bg:#232f2d; --st-wish-text:#b7c7c3;
+    --st-discuss-bg:#3a2c10; --st-discuss-text:#f0b429;
+    --st-approved-bg:#123625; --st-approved-text:#4ade80;
+    --st-paid-bg:#1d4b47; --st-paid-text:#d7fff7;
+    --st-declined-bg:#3a1f1f; --st-declined-text:#f1a7a7;
+    --cat-supplies-bg:#1c2436; --cat-supplies-text:#9db4e8;
+    --cat-venue-bg:#2a2036; --cat-venue-text:#cda8f0;
+    --cat-equip-bg:#3a2c10; --cat-equip-text:#f0b429;
+    --cat-coach-bg:#173432; --cat-coach-text:#4fd7ce;
+    --cat-match-bg:#182e1e; --cat-match-text:#6fd98d;
+    --cat-transport-bg:#1d2422; --cat-transport-text:#aab6b3;
+    --danger:#e0817d;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#16211f; --surface-2:#1d2b28; --border:#2a3835;
+  --text:#e7efed; --text-muted:#9db0ac;
+  --accent:#2bb3ac; --accent-strong:#3fcac2; --accent-soft:#173432; --accent-contrast:#06201f;
+  --gold:#e0b155; --gold-soft:#2e2412;
+  --st-wish-bg:#232f2d; --st-wish-text:#b7c7c3;
+  --st-discuss-bg:#3a2c10; --st-discuss-text:#f0b429;
+  --st-approved-bg:#123625; --st-approved-text:#4ade80;
+  --st-paid-bg:#1d4b47; --st-paid-text:#d7fff7;
+  --st-declined-bg:#3a1f1f; --st-declined-text:#f1a7a7;
+  --cat-supplies-bg:#1c2436; --cat-supplies-text:#9db4e8;
+  --cat-venue-bg:#2a2036; --cat-venue-text:#cda8f0;
+  --cat-equip-bg:#3a2c10; --cat-equip-text:#f0b429;
+  --cat-coach-bg:#173432; --cat-coach-text:#4fd7ce;
+  --cat-match-bg:#182e1e; --cat-match-text:#6fd98d;
+  --cat-transport-bg:#1d2422; --cat-transport-text:#aab6b3;
+  --danger:#e0817d;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;line-height:1.6;}
+h1,h2,h3{font-family:'Noto Serif TC',serif;font-weight:700;text-wrap:balance;margin:0;}
+.tabular{font-variant-numeric:tabular-nums;}
+button,select,input,textarea{font-family:inherit;font-size:inherit;color:inherit;}
+button{cursor:pointer;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+.page{max-width:1080px;margin:0 auto;padding:28px 20px 80px;}
+
+.mode-banner{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:var(--text-muted);}
+.mode-banner .badge{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--text);}
+.mode-banner.error{background:var(--st-declined-bg);border-color:var(--danger);color:var(--st-declined-text);}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--text-muted);display:inline-block;}
+.dot.remote{background:var(--accent);}
+.dot.error{background:var(--danger);}
+
+.hero{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px 28px;display:flex;gap:28px;flex-wrap:wrap;align-items:center;justify-content:space-between;box-shadow:var(--shadow);}
+.hero-ripple{position:absolute;right:-40px;top:-40px;width:220px;height:220px;pointer-events:none;opacity:.55;}
+.hero-content{position:relative;max-width:560px;flex:1 1 320px;}
+.eyebrow{color:var(--accent);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
+.hero-content h1{font-size:clamp(26px,4vw,34px);color:var(--text);margin-bottom:10px;}
+.hero-content p{color:var(--text-muted);font-size:14.5px;max-width:46ch;}
+.budget-card{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px 20px;min-width:240px;flex:0 0 auto;}
+.budget-label{font-size:12.5px;color:var(--text-muted);font-weight:500;margin-bottom:6px;}
+.budget-amount{font-size:22px;font-weight:700;color:var(--gold);margin-bottom:10px;}
+.budget-amount .cap{font-size:14px;color:var(--text-muted);font-weight:500;}
+.budget-bar{height:8px;border-radius:100px;background:var(--border);overflow:hidden;margin-bottom:8px;}
+.budget-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--accent));border-radius:100px;transition:width .3s ease;}
+.budget-note{font-size:12.5px;color:var(--text-muted);}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin:22px 0 18px;}
+.cat-tabs{display:flex;flex-wrap:wrap;gap:8px;}
+.cat-tab{border:1px solid var(--border);background:var(--surface);border-radius:100px;padding:7px 14px;font-size:13px;font-weight:500;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px;transition:background .15s,border-color .15s,color .15s;}
+.cat-tab .count{font-size:11.5px;background:var(--surface-2);color:var(--text-muted);border-radius:100px;padding:1px 6px;}
+.cat-tab.active{background:var(--accent);border-color:var(--accent);color:var(--accent-contrast);}
+.cat-tab.active .count{background:rgba(255,255,255,.25);color:inherit;}
+.toolbar-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.identity-field{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);}
+.identity-field input{width:110px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);}
+.select-sort{padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);}
+.btn-primary{background:var(--accent);color:var(--accent-contrast);border:none;border-radius:9px;padding:9px 18px;font-weight:700;font-size:14px;box-shadow:var(--shadow);}
+.btn-primary:hover{background:var(--accent-strong);}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;}
+.btn-ghost{background:transparent;border:1px solid var(--border);border-radius:9px;padding:9px 16px;font-weight:600;font-size:13.5px;color:var(--text-muted);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+
+.new-wish-panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:22px;box-shadow:var(--shadow);}
+.new-wish-panel h2{font-size:18px;margin-bottom:4px;}
+.new-wish-panel > p.hint{color:var(--text-muted);font-size:13px;margin-bottom:16px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-grid .full{grid-column:1/-1;}
+label.field-label{display:block;font-size:12.5px;font-weight:700;color:var(--text-muted);margin-bottom:5px;}
+.form-grid input[type=text],.form-grid select,.form-grid textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);}
+.form-grid textarea{resize:vertical;min-height:64px;}
+.items-editor{border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.items-editor .item-row{display:grid;grid-template-columns:1fr 70px 110px 100px 32px;gap:8px;padding:8px 10px;align-items:center;border-bottom:1px solid var(--border);}
+.items-editor .item-row:last-child{border-bottom:none;}
+.items-editor .item-row.head{background:var(--surface-2);font-size:11.5px;font-weight:700;color:var(--text-muted);padding:6px 10px;}
+.items-editor input{padding:6px 8px;border:1px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);width:100%;}
+.item-remove{background:transparent;border:none;color:var(--danger);font-size:16px;line-height:1;padding:4px;}
+.item-subtotal{font-size:13px;color:var(--text-muted);text-align:right;}
+.add-row-btn{width:100%;padding:9px;background:var(--surface-2);border:none;border-top:1px dashed var(--border);color:var(--accent);font-weight:600;font-size:13px;}
+.form-total{display:flex;justify-content:flex-end;gap:8px;align-items:baseline;padding:10px 2px 0;font-size:14px;color:var(--text-muted);}
+.form-total .amt{font-size:20px;font-weight:700;color:var(--gold);}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+.form-error{color:var(--danger);font-size:13px;margin-top:10px;}
+
+.wish-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+.wish-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 18px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;}
+.card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+.chip{display:inline-flex;align-items:center;border-radius:100px;padding:3px 10px;font-size:11.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap;}
+.cat-supplies{background:var(--cat-supplies-bg);color:var(--cat-supplies-text);}
+.cat-venue{background:var(--cat-venue-bg);color:var(--cat-venue-text);}
+.cat-equip{background:var(--cat-equip-bg);color:var(--cat-equip-text);}
+.cat-coach{background:var(--cat-coach-bg);color:var(--cat-coach-text);}
+.cat-match{background:var(--cat-match-bg);color:var(--cat-match-text);}
+.cat-transport{background:var(--cat-transport-bg);color:var(--cat-transport-text);}
+.st-wish{background:var(--st-wish-bg);color:var(--st-wish-text);}
+.st-discuss{background:var(--st-discuss-bg);color:var(--st-discuss-text);}
+.st-approved{background:var(--st-approved-bg);color:var(--st-approved-text);}
+.st-paid{background:var(--st-paid-bg);color:var(--st-paid-text);}
+.st-declined{background:var(--st-declined-bg);color:var(--st-declined-text);}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;}
+.card-amount{font-size:19px;font-weight:700;color:var(--gold);white-space:nowrap;}
+.card-title{font-size:16.5px;font-weight:700;cursor:pointer;}
+.card-meta{font-size:12.5px;color:var(--text-muted);}
+.card-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.pill-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface-2);border-radius:100px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--text-muted);}
+.pill-btn svg{width:14px;height:14px;}
+.pill-btn.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+.pill-btn.against.on{background:var(--st-declined-bg);border-color:var(--danger);color:var(--danger);}
+.expand-toggle{margin-left:auto;background:transparent;border:none;color:var(--text-muted);font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;}
+.expand-toggle svg{width:14px;height:14px;transition:transform .15s;}
+.wish-card.expanded .expand-toggle svg{transform:rotate(180deg);}
+.card-detail{display:none;flex-direction:column;gap:14px;border-top:1px solid var(--border);padding-top:14px;}
+.wish-card.expanded .card-detail{display:flex;}
+.detail-reason{font-size:13.5px;color:var(--text);}
+.items-table{width:100%;border-collapse:collapse;font-size:13px;}
+.items-table th{text-align:left;font-size:11px;color:var(--text-muted);font-weight:700;padding:4px 6px;border-bottom:1px solid var(--border);}
+.items-table td{padding:6px 6px;border-bottom:1px solid var(--border);}
+.items-table tr:last-child td{border-bottom:none;}
+.items-table td.num,.items-table th.num{text-align:right;}
+.items-total-row td{font-weight:700;color:var(--text);}
+.receipt-note{font-size:12.5px;color:var(--text-muted);background:var(--surface-2);border-radius:8px;padding:8px 10px;display:flex;gap:6px;}
+.vote-quorum{background:var(--accent-soft);border-radius:10px;padding:12px 14px;font-size:12.5px;}
+.vote-quorum-line{display:flex;justify-content:space-between;margin-bottom:6px;color:var(--text-muted);}
+.vote-quorum-bar{height:6px;border-radius:100px;background:var(--border);overflow:hidden;margin-bottom:8px;}
+.vote-quorum-fill{height:100%;background:var(--accent);border-radius:100px;}
+.vote-quorum-result{font-weight:700;}
+.vote-quorum-result.ok{color:var(--st-approved-text);}
+.vote-quorum-result.pending{color:var(--st-discuss-text);}
+.officer-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-muted);}
+.officer-row select{padding:5px 8px;border:1px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);}
+.comments{display:flex;flex-direction:column;gap:8px;}
+.comments h4{font-size:12.5px;color:var(--text-muted);font-weight:700;}
+.comment{background:var(--surface-2);border-radius:10px;padding:8px 10px;font-size:13px;}
+.comment .c-head{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-muted);margin-bottom:3px;}
+.comment .c-head b{color:var(--text);font-weight:700;}
+.comment-form{display:flex;gap:8px;}
+.comment-form textarea{flex:1;min-height:38px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);resize:vertical;}
+.comment-form button{align-self:flex-end;background:var(--accent);color:var(--accent-contrast);border:none;border-radius:9px;padding:9px 14px;font-weight:700;font-size:13px;}
+.empty-state{color:var(--text-muted);font-size:14px;text-align:center;padding:40px 0;}
+@media (max-width:520px){
+  .form-grid{grid-template-columns:1fr;}
+  .items-editor .item-row{grid-template-columns:1fr 50px 90px 70px 28px;}
+}
+</style>
+
+<div class="page">
+  <div class="mode-banner" id="modeBanner"></div>
+
+  <header class="hero">
+    <svg class="hero-ripple" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="150" cy="50" r="18" fill="none" stroke="var(--accent)" stroke-width="2" opacity=".5"/>
+      <circle cx="150" cy="50" r="42" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity=".32"/>
+      <circle cx="150" cy="50" r="68" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity=".18"/>
+      <circle cx="150" cy="50" r="96" fill="none" stroke="var(--gold)" stroke-width="1.5" opacity=".14"/>
+    </svg>
+    <div class="hero-content">
+      <p class="eyebrow">社團經費 · 提案與討論</p>
+      <h1>許願池</h1>
+      <p>想添購什麼、想申請哪個項目的補助,先丟進許願池讓大家看見明細和金額,附議、留言討論後,幹部再走正式核准與核銷。</p>
+    </div>
+    <div class="budget-card">
+      <div class="budget-label">年度發展補助額度（本年度）</div>
+      <div class="budget-amount tabular"><span id="budgetUsed">—</span> <span class="cap" id="budgetCapLine"></span></div>
+      <div class="budget-bar"><div class="budget-fill" id="budgetFill" style="width:0%"></div></div>
+      <div class="budget-note" id="budgetNote"></div>
+    </div>
+  </header>
+
+  <section class="toolbar">
+    <div class="cat-tabs" id="catTabs"></div>
+    <div class="toolbar-right">
+      <div class="identity-field">
+        <span>你的稱呼</span>
+        <input type="text" id="identityInput" placeholder="輸入名字" maxlength="20">
+      </div>
+      <select class="select-sort" id="sortSelect">
+        <option value="new">最新</option>
+        <option value="hot">最多附議</option>
+      </select>
+      <button class="btn-primary" id="newWishBtn">＋ 我要許願</button>
+    </div>
+  </section>
+
+  <section class="new-wish-panel" id="newWishPanel" hidden>
+    <h2>提出一個許願</h2>
+    <p class="hint">填清楚細項與金額,方便大家理解、也方便之後核銷比對收據。</p>
+    <div class="form-grid">
+      <div class="full">
+        <label class="field-label">項目名稱</label>
+        <input type="text" id="fTitle" placeholder="例如：購買公用羽球拍與羽球">
+      </div>
+      <div>
+        <label class="field-label">分類</label>
+        <select id="fCategory">
+          <option value="耗材">社團耗材</option>
+          <option value="場地租借">場地租借</option>
+          <option value="大型設備">大型設備（單價逾 5,000 需社員投票）</option>
+          <option value="指導費用">指導員費用</option>
+          <option value="友誼賽">友誼賽報名費</option>
+          <option value="交通費">場域受限交通費</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">提案人</label>
+        <input type="text" id="fProposer" placeholder="你的名字">
+      </div>
+      <div class="full">
+        <label class="field-label">用途說明</label>
+        <textarea id="fReason" placeholder="為什麼需要這筆經費、預計怎麼使用"></textarea>
+      </div>
+      <div class="full">
+        <label class="field-label">細項明細</label>
+        <div class="items-editor" id="itemsEditor">
+          <div class="item-row head"><span>品項</span><span>數量</span><span>單價</span><span>小計</span><span></span></div>
+          <div id="itemRows"></div>
+          <button type="button" class="add-row-btn" id="addRowBtn">＋ 新增一列</button>
+        </div>
+        <div class="form-total">預估總金額 <span class="amt tabular" id="formTotal">NT$0</span></div>
+      </div>
+      <div class="full">
+        <label class="field-label">佐證資料</label>
+        <input type="text" id="fReceipt" placeholder="估價單編號 / 收據字軌 / 雲端連結（之後核銷時對照用）">
+      </div>
+    </div>
+    <p class="form-error" id="formError" hidden></p>
+    <div class="form-actions">
+      <button class="btn-ghost" id="cancelWishBtn">取消</button>
+      <button class="btn-primary" id="submitWishBtn">送出許願</button>
+    </div>
+  </section>
+
+  <section class="wish-grid" id="wishGrid"></section>
+  <p class="empty-state" id="emptyState" hidden>這個分類目前沒有許願,換個分類看看,或第一個發起提案吧。</p>
+</div>
+
+<script>
+/* =========================================================================
+   設定：把你部署 Google Apps Script 網頁應用程式後拿到的網址貼在這裡。
+   部署步驟請看同一個 repo 裡的 apps-script/SETUP.md。
+   貼上之前,網站會用瀏覽器本機示範資料執行,不會影響任何人。
+   ========================================================================= */
+const API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const USE_REMOTE = API_URL.indexOf('https://script.google.com') === 0;
+
+const STORAGE_KEY='wishpool_local_v1';
+const IDENTITY_KEY='wishpool_identity_v1';
+const CAT_META={
+  '耗材':{cls:'cat-supplies',label:'社團耗材'},
+  '場地租借':{cls:'cat-venue',label:'場地租借'},
+  '大型設備':{cls:'cat-equip',label:'大型設備'},
+  '指導費用':{cls:'cat-coach',label:'指導員費用'},
+  '友誼賽':{cls:'cat-match',label:'友誼賽報名費'},
+  '交通費':{cls:'cat-transport',label:'場域交通費'}
+};
+const ST_META={
+  '許願中':{cls:'st-wish'},
+  '討論中':{cls:'st-discuss'},
+  '已核准':{cls:'st-approved'},
+  '已核銷':{cls:'st-paid'},
+  '婉拒':{cls:'st-declined'}
+};
+const STATUS_LIST=['許願中','討論中','已核准','已核銷','婉拒'];
+
+function uid(prefix){return prefix+'_'+Math.random().toString(36).slice(2,9);}
+function amountOf(items){return items.reduce((s,it)=>s+it.qty*it.unitPrice,0);}
+function fmtMoney(n){return 'NT$'+Math.round(n).toLocaleString('zh-TW');}
+function timeAgo(ts){
+  const diff=Date.now()-ts, min=6e4, hr=36e5, day=864e5;
+  if(diff<min) return '剛剛';
+  if(diff<hr) return Math.floor(diff/min)+' 分鐘前';
+  if(diff<day) return Math.floor(diff/hr)+' 小時前';
+  if(diff<day*7) return Math.floor(diff/day)+' 天前';
+  const d=new Date(ts); return (d.getMonth()+1)+'/'+d.getDate();
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* ---- 使用者身分（只存在這個瀏覽器,不影響共用資料）---- */
+function loadIdentity(){
+  try{ const raw=localStorage.getItem(IDENTITY_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  const fresh={name:'', voterId:uid('v')};
+  try{ localStorage.setItem(IDENTITY_KEY, JSON.stringify(fresh)); }catch(e){}
+  return fresh;
+}
+function saveIdentity(){ try{ localStorage.setItem(IDENTITY_KEY, JSON.stringify(you)); }catch(e){} }
+let you = loadIdentity();
+function ensureName(){
+  const input=document.getElementById('identityInput');
+  if(!you.name){ input.focus(); return false; }
+  return true;
+}
+
+/* ---- 本機示範資料（尚未接上 Google 試算表時使用）---- */
+function seedLocalState(){
+  const day=864e5, now=Date.now();
+  return {
+    settings:{totalMembers:36, annualCap:20000},
+    wishes:[
+      {id:'w1', title:'羽球拍與羽球補貨', category:'耗材', proposerName:'林亭妤', reason:'社課用球拍老化、羽球消耗快,補齊公用裝備讓大家練球不斷手。',
+        items:[{name:'羽球拍（公用）',qty:4,unitPrice:450},{name:'羽球筒（12顆裝）',qty:6,unitPrice:280}],
+        receiptNote:'將於運動用品店現場開統編收據', status:'已核准', createdAt: now-9*day,
+        votes:[{id:'v1',name:'Emma',choice:'for'},{id:'v2',name:'阿凱',choice:'for'},{id:'v3',name:'柏宇',choice:'for'},{id:'v4',name:'詩涵',choice:'for'},{id:'v5',name:'庭安',choice:'for'}],
+        comments:[
+          {id:'c1',name:'社長 Emma',text:'需要的話我可以先墊,之後核銷。',createdAt:now-8*day},
+          {id:'c2',name:'財務 阿凱',text:'金額在額度內沒問題,附上估價單就能核准。',createdAt:now-8*day+3600000}
+        ]},
+      {id:'w2', title:'校外場地租借（9/20 友誼賽前練習）', category:'場地租借', proposerName:'陳柏宇', reason:'友誼賽對手場館較遠,想租借鄰近的振興體育館練習,方便社員賽前熱身。',
+        items:[{name:'場地租借（2小時）',qty:1,unitPrice:1500}],
+        receiptNote:'場館收據將於活動後由財務上傳', status:'討論中', createdAt: now-5*day,
+        votes:[{id:'v1',name:'詩涵',choice:'for'},{id:'v2',name:'宗翰',choice:'for'},{id:'v3',name:'庭安',choice:'for'}],
+        comments:[{id:'c1',name:'黃詩涵',text:'那天教室剛好也有借到,要不要比較一下兩邊場地？',createdAt:now-4*day}]},
+      {id:'w3', title:'直播用混音器一台', category:'大型設備', proposerName:'吳宗翰', reason:'社課直播常有雜音,添購混音器統一收音,之後也能留給下一屆社員使用。',
+        items:[{name:'USB 混音器',qty:1,unitPrice:6800}],
+        receiptNote:'已向店家詢價,可提供估價單', status:'討論中', createdAt: now-3*day,
+        votes:[
+          {id:'v1',name:'庭安',choice:'for'},{id:'v2',name:'亭妤',choice:'for'},{id:'v3',name:'柏宇',choice:'for'},{id:'v4',name:'詩涵',choice:'for'},
+          {id:'v5',name:'冠廷',choice:'for'},{id:'v6',name:'子晴',choice:'for'},{id:'v7',name:'俊彥',choice:'for'},{id:'v8',name:'佳蓉',choice:'for'},
+          {id:'v9',name:'志明',choice:'against'},{id:'v10',name:'雅婷',choice:'against'}
+        ],
+        comments:[
+          {id:'c1',name:'許庭安',text:'贊成,直播品質真的需要提升。',createdAt:now-2*day},
+          {id:'c2',name:'林亭妤',text:'單價超過 5,000,要走投票程序,我先幫忙統計人數。',createdAt:now-2*day+1800000}
+        ]},
+      {id:'w4', title:'邀請外聘教練指導 3 堂課', category:'指導費用', proposerName:'黃詩涵', reason:'期末友誼賽前想加強戰術,邀請合作已久的教練來上 3 堂進階課。',
+        items:[{name:'教練費（每堂）',qty:3,unitPrice:1500}],
+        receiptNote:'教練已開立收據,核銷完成', status:'已核銷', createdAt: now-20*day,
+        votes:[{id:'v1',name:'庭安',choice:'for'},{id:'v2',name:'亭妤',choice:'for'},{id:'v3',name:'柏宇',choice:'for'},{id:'v4',name:'宗翰',choice:'for'},{id:'v5',name:'子晴',choice:'for'},{id:'v6',name:'俊彥',choice:'for'}],
+        comments:[]},
+      {id:'w5', title:'跨校友誼賽報名費（兩隊）', category:'友誼賽', proposerName:'許庭安', reason:'與鄰校社團約定友誼賽,分甲、乙兩隊報名參賽。',
+        items:[{name:'報名費（每隊）',qty:2,unitPrice:400}],
+        receiptNote:'報名確認信可作為佐證', status:'許願中', createdAt: now-1*day,
+        votes:[{id:'v1',name:'亭妤',choice:'for'},{id:'v2',name:'詩涵',choice:'for'}], comments:[]},
+      {id:'w6', title:'場域受限交通費（練習場地往返）', category:'交通費', proposerName:'林亭妤', reason:'本學期借用的練習場地離校較遠,申請社員共乘往返的交通費,併入年度發展補助額度計算。',
+        items:[{name:'包車費（往返）',qty:1,unitPrice:600}],
+        receiptNote:'車行收據', status:'許願中', createdAt: now-12*3600000,
+        votes:[{id:'v1',name:'柏宇',choice:'for'}], comments:[]}
+    ]
+  };
+}
+function loadLocalState(){
+  try{ const raw=localStorage.getItem(STORAGE_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  return seedLocalState();
+}
+function saveLocalState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ---- 遠端資料（Google 試算表,透過 Apps Script 網頁應用程式）---- */
+async function apiGet(){
+  const res=await fetch(API_URL+'?action=data');
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  return res.json();
+}
+async function apiPost(action,payload){
+  const res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload})});
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  return res.json();
+}
+
+let state = USE_REMOTE ? {settings:{totalMembers:0,annualCap:20000}, wishes:[]} : loadLocalState();
+let ui={category:'all', sort:'new', expanded:null, commentDrafts:{}};
+let loading = USE_REMOTE;
+let apiError = false;
+
+function setModeBanner(){
+  const el=document.getElementById('modeBanner');
+  if(!USE_REMOTE){
+    el.className='mode-banner';
+    el.innerHTML='<span class="badge"><span class="dot"></span>瀏覽器示範模式</span><span>資料只存在你自己的瀏覽器,尚未連接 Google 試算表。設定好 apps-script/SETUP.md 後,把網址貼進 index.html 最上面的 API_URL 即可正式啟用。</span>';
+    return;
+  }
+  if(apiError){
+    el.className='mode-banner error';
+    el.innerHTML='<span class="badge"><span class="dot error"></span>連線失敗</span><span>暫時無法連上 Google 試算表,請確認 Apps Script 部署為「任何人」都能存取,稍後會自動重試。</span>';
+    return;
+  }
+  el.className='mode-banner';
+  el.innerHTML='<span class="badge"><span class="dot remote"></span>已連接 Google 試算表</span><span>大家在這裡送出的許願、投票、留言都會同步收集到你的 Google 雲端。</span>';
+}
+
+async function refresh(){
+  if(!USE_REMOTE){ render(); return; }
+  try{
+    const data=await apiGet();
+    state.settings = data.settings || state.settings;
+    state.wishes = data.wishes || [];
+    apiError=false; loading=false;
+  }catch(err){
+    apiError=true; loading=false;
+  }
+  setModeBanner();
+  render();
+}
+
+function render(){
+  setModeBanner();
+  renderBudget();
+  renderTabs();
+  renderGrid();
+  document.getElementById('identityInput').value=you.name;
+}
+
+function renderBudget(){
+  const cap=Number(state.settings.annualCap)||20000;
+  if(loading){
+    document.getElementById('budgetUsed').textContent='載入中…';
+    document.getElementById('budgetCapLine').textContent='';
+    document.getElementById('budgetFill').style.width='0%';
+    document.getElementById('budgetNote').textContent='';
+    return;
+  }
+  const used=state.wishes.filter(w=>w.status==='已核准'||w.status==='已核銷').reduce((s,w)=>s+amountOf(w.items),0);
+  document.getElementById('budgetUsed').textContent=fmtMoney(used);
+  document.getElementById('budgetCapLine').textContent='／ 上限 '+fmtMoney(cap);
+  document.getElementById('budgetFill').style.width=Math.min(100, used/cap*100)+'%';
+  document.getElementById('budgetNote').textContent='已核准與已核銷項目共計,尚餘 '+fmtMoney(Math.max(0,cap-used));
+}
+
+function renderTabs(){
+  const cats=Object.keys(CAT_META);
+  const counts={}; cats.forEach(c=>counts[c]=0);
+  state.wishes.forEach(w=>counts[w.category]=(counts[w.category]||0)+1);
+  const all=state.wishes.length;
+  let html='<button class="cat-tab '+(ui.category==='all'?'active':'')+'" data-cat="all">全部<span class="count">'+all+'</span></button>';
+  cats.forEach(c=>{
+    html+='<button class="cat-tab '+(ui.category===c?'active':'')+'" data-cat="'+c+'">'+CAT_META[c].label+'<span class="count">'+counts[c]+'</span></button>';
+  });
+  document.getElementById('catTabs').innerHTML=html;
+}
+
+function visibleWishes(){
+  let list=state.wishes.filter(w=>ui.category==='all'||w.category===ui.category);
+  if(ui.sort==='hot') list=list.slice().sort((a,b)=> b.votes.filter(v=>v.choice==='for').length - a.votes.filter(v=>v.choice==='for').length || b.createdAt-a.createdAt);
+  else list=list.slice().sort((a,b)=>b.createdAt-a.createdAt);
+  return list;
+}
+
+function voteIcon(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v11"/><path d="M15 5.88 14 10h6.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 18.5 22H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h2.76a2 2 0 0 0 1.79-1.11L12 2h1a2 2 0 0 1 2 2z"/></svg>';}
+function commentIcon(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';}
+function chevron(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';}
+
+function renderGrid(){
+  if(loading){
+    document.getElementById('emptyState').hidden=true;
+    document.getElementById('wishGrid').innerHTML='<p class="empty-state">載入許願池資料中…</p>';
+    return;
+  }
+  const list=visibleWishes();
+  document.getElementById('emptyState').hidden=list.length>0;
+  document.getElementById('wishGrid').innerHTML=list.map(cardHtml).join('');
+}
+
+function cardHtml(w){
+  const amount=amountOf(w.items);
+  const cat=CAT_META[w.category], st=ST_META[w.status];
+  const forVotes=w.votes.filter(v=>v.choice==='for');
+  const againstVotes=w.votes.filter(v=>v.choice==='against');
+  const needsFormalVote = w.category==='大型設備' && amount>5000;
+  const myVote = w.votes.find(v=>v.id===you.voterId);
+  const expanded = ui.expanded===w.id;
+
+  let voteControls;
+  if(needsFormalVote){
+    voteControls =
+      '<button class="pill-btn '+(myVote&&myVote.choice==='for'?'on':'')+'" data-action="vote" data-choice="for" data-id="'+w.id+'">'+voteIcon()+' 贊成 <span class="tabular">'+forVotes.length+'</span></button>'+
+      '<button class="pill-btn against '+(myVote&&myVote.choice==='against'?'on':'')+'" data-action="vote" data-choice="against" data-id="'+w.id+'">反對 <span class="tabular">'+againstVotes.length+'</span></button>';
+  } else {
+    voteControls = '<button class="pill-btn '+(myVote?'on':'')+'" data-action="vote" data-choice="for" data-id="'+w.id+'">'+voteIcon()+' 附議 <span class="tabular">'+forVotes.length+'</span></button>';
+  }
+
+  let quorumHtml='';
+  if(needsFormalVote){
+    const threshold=Math.ceil((Number(state.settings.totalMembers)||1)/3);
+    const participated=w.votes.length;
+    const pct=Math.min(100, participated/threshold*100);
+    const reached=participated>=threshold;
+    const majority=forVotes.length>againstVotes.length;
+    let resultLine;
+    if(!reached) resultLine='<span class="vote-quorum-result pending">尚需 '+(threshold-participated)+' 人參與投票（門檻 '+threshold+' 人）</span>';
+    else if(majority) resultLine='<span class="vote-quorum-result ok">已達門檻,贊成過半 — 待幹部核定</span>';
+    else resultLine='<span class="vote-quorum-result pending">已達門檻,但未過半數同意</span>';
+    quorumHtml='<div class="vote-quorum">'+
+      '<div class="vote-quorum-line"><span>單價逾 NT$5,000,需 1/3 社員（'+threshold+' 人）投票且過半數同意</span><span class="tabular">'+participated+'/'+threshold+' 人已表態</span></div>'+
+      '<div class="vote-quorum-bar"><div class="vote-quorum-fill" style="width:'+pct+'%"></div></div>'+
+      resultLine+'</div>';
+  }
+
+  const itemsRows=w.items.map(it=>'<tr><td>'+esc(it.name)+'</td><td class="num tabular">'+it.qty+'</td><td class="num tabular">'+fmtMoney(it.unitPrice)+'</td><td class="num tabular">'+fmtMoney(it.qty*it.unitPrice)+'</td></tr>').join('');
+
+  const commentsHtml=w.comments.map(c=>'<div class="comment"><div class="c-head"><b>'+esc(c.name)+'</b><span>'+timeAgo(c.createdAt)+'</span></div>'+esc(c.text)+'</div>').join('');
+  const draft=ui.commentDrafts[w.id]||'';
+
+  return '<article class="wish-card '+(expanded?'expanded':'')+'" data-id="'+w.id+'">'+
+    '<div class="card-top">'+
+      '<div><div class="chip-row"><span class="chip '+cat.cls+'">'+cat.label+'</span><span class="chip '+st.cls+'">'+w.status+'</span></div>'+
+      '<div class="card-title" data-action="toggle" data-id="'+w.id+'" style="margin-top:8px;">'+esc(w.title)+'</div>'+
+      '<div class="card-meta">'+esc(w.proposerName)+' 提案 · '+timeAgo(w.createdAt)+'</div></div>'+
+      '<div class="card-amount tabular">'+fmtMoney(amount)+'</div>'+
+    '</div>'+
+    '<div class="card-actions">'+voteControls+
+      '<button class="pill-btn" data-action="toggle" data-id="'+w.id+'">'+commentIcon()+' <span class="tabular">'+w.comments.length+'</span></button>'+
+      '<button class="expand-toggle" data-action="toggle" data-id="'+w.id+'">'+(expanded?'收合':'查看明細')+chevron()+'</button>'+
+    '</div>'+
+    '<div class="card-detail">'+
+      '<p class="detail-reason">'+esc(w.reason)+'</p>'+
+      '<table class="items-table"><thead><tr><th>品項</th><th class="num">數量</th><th class="num">單價</th><th class="num">小計</th></tr></thead><tbody>'+itemsRows+
+      '<tr class="items-total-row"><td colspan="3">總計</td><td class="num tabular">'+fmtMoney(amount)+'</td></tr></tbody></table>'+
+      '<div class="receipt-note">佐證資料：'+esc(w.receiptNote||'（尚未填寫）')+'</div>'+
+      quorumHtml+
+      '<div class="officer-row">幹部處理：狀態 <select data-action="status" data-id="'+w.id+'">'+STATUS_LIST.map(s=>'<option value="'+s+'" '+(s===w.status?'selected':'')+'>'+s+'</option>').join('')+'</select></div>'+
+      '<div class="comments"><h4>大家的意見（'+w.comments.length+'）</h4>'+commentsHtml+
+        '<div class="comment-form"><textarea data-action="draft" data-id="'+w.id+'" placeholder="留下你的意見或建議">'+esc(draft)+'</textarea><button data-action="comment" data-id="'+w.id+'">送出</button></div>'+
+      '</div>'+
+    '</div>'+
+  '</article>';
+}
+
+/* ---- 新增許願表單 ---- */
+let draftItems=[{name:'',qty:1,unitPrice:0}];
+function renderItemRows(){
+  document.getElementById('itemRows').innerHTML=draftItems.map((it,i)=>
+    '<div class="item-row">'+
+      '<input type="text" data-idx="'+i+'" data-f="name" placeholder="品項" value="'+esc(it.name)+'">'+
+      '<input type="text" inputmode="numeric" data-idx="'+i+'" data-f="qty" value="'+it.qty+'">'+
+      '<input type="text" inputmode="numeric" data-idx="'+i+'" data-f="unitPrice" value="'+it.unitPrice+'">'+
+      '<span class="item-subtotal tabular">'+fmtMoney(it.qty*it.unitPrice||0)+'</span>'+
+      '<button type="button" class="item-remove" data-idx="'+i+'">✕</button>'+
+    '</div>').join('');
+  document.getElementById('formTotal').textContent=fmtMoney(amountOf(draftItems.map(it=>({qty:+it.qty||0,unitPrice:+it.unitPrice||0}))));
+}
+function resetForm(){
+  draftItems=[{name:'',qty:1,unitPrice:0}];
+  document.getElementById('fTitle').value='';
+  document.getElementById('fCategory').value='耗材';
+  document.getElementById('fReason').value='';
+  document.getElementById('fReceipt').value='';
+  document.getElementById('fProposer').value=you.name;
+  document.getElementById('formError').hidden=true;
+  renderItemRows();
+}
+
+document.getElementById('newWishBtn').addEventListener('click',()=>{
+  resetForm();
+  document.getElementById('newWishPanel').hidden=false;
+  document.getElementById('newWishPanel').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.getElementById('cancelWishBtn').addEventListener('click',()=>{
+  document.getElementById('newWishPanel').hidden=true;
+});
+document.getElementById('addRowBtn').addEventListener('click',()=>{
+  draftItems.push({name:'',qty:1,unitPrice:0});
+  renderItemRows();
+});
+document.getElementById('itemRows').addEventListener('input',e=>{
+  const t=e.target; if(t.dataset.idx==null) return;
+  const idx=+t.dataset.idx, f=t.dataset.f;
+  draftItems[idx][f]= f==='name'? t.value : (t.value.replace(/[^0-9]/g,''));
+  renderItemRows();
+  const again=document.querySelector('[data-idx="'+idx+'"][data-f="'+f+'"]');
+  if(again){ again.focus(); const v=again.value; again.setSelectionRange(v.length,v.length); }
+});
+document.getElementById('itemRows').addEventListener('click',e=>{
+  const t=e.target.closest('.item-remove'); if(!t) return;
+  const idx=+t.dataset.idx;
+  if(draftItems.length>1) draftItems.splice(idx,1);
+  renderItemRows();
+});
+document.getElementById('submitWishBtn').addEventListener('click', async ()=>{
+  const title=document.getElementById('fTitle').value.trim();
+  const proposerName=document.getElementById('fProposer').value.trim();
+  const items=draftItems.map(it=>({name:it.name.trim(),qty:+it.qty||0,unitPrice:+it.unitPrice||0})).filter(it=>it.name&&it.qty>0&&it.unitPrice>0);
+  const errEl=document.getElementById('formError');
+  if(!title||!proposerName||items.length===0){
+    errEl.textContent='請填寫項目名稱、提案人,並至少填一列完整的細項（品項／數量／單價）。';
+    errEl.hidden=false; return;
+  }
+  const payload={ title, category: document.getElementById('fCategory').value, proposerName,
+    reason: document.getElementById('fReason').value.trim(), items,
+    receiptNote: document.getElementById('fReceipt').value.trim() };
+
+  const submitBtn=document.getElementById('submitWishBtn');
+  submitBtn.disabled=true;
+  try{
+    if(USE_REMOTE){
+      await apiPost('addWish', payload);
+      you.name=proposerName; saveIdentity();
+      document.getElementById('newWishPanel').hidden=true;
+      await refresh();
+    } else {
+      state.wishes.unshift(Object.assign({id:uid('w'), status:'許願中', createdAt:Date.now(), votes:[], comments:[]}, payload));
+      you.name=proposerName; saveIdentity();
+      saveLocalState();
+      document.getElementById('newWishPanel').hidden=true;
+      render();
+    }
+  } catch(err){
+    errEl.textContent='送出失敗,請確認網路連線後再試一次。';
+    errEl.hidden=false;
+  } finally {
+    submitBtn.disabled=false;
+  }
+});
+
+/* ---- 頁籤 / 排序 / 身分 ---- */
+document.getElementById('catTabs').addEventListener('click',e=>{
+  const t=e.target.closest('.cat-tab'); if(!t) return;
+  ui.category=t.dataset.cat; renderTabs(); renderGrid();
+});
+document.getElementById('sortSelect').addEventListener('change',e=>{ ui.sort=e.target.value; renderGrid(); });
+document.getElementById('identityInput').addEventListener('change',e=>{ you.name=e.target.value.trim(); saveIdentity(); });
+
+/* ---- 卡片內的操作（附議／投票／留言／展開／狀態）---- */
+document.getElementById('wishGrid').addEventListener('click', async e=>{
+  const voteBtn=e.target.closest('[data-action="vote"]');
+  const toggleBtn=e.target.closest('[data-action="toggle"]');
+  const commentBtn=e.target.closest('[data-action="comment"]');
+
+  if(voteBtn){
+    if(!ensureName()) return;
+    const id=voteBtn.dataset.id, choice=voteBtn.dataset.choice;
+    if(USE_REMOTE){
+      await apiPost('vote',{wishId:id, voterId:you.voterId, name:you.name, choice});
+      await refresh();
+    } else {
+      const w=state.wishes.find(x=>x.id===id);
+      const existing=w.votes.find(v=>v.id===you.voterId);
+      if(existing && existing.choice===choice){ w.votes=w.votes.filter(v=>v.id!==you.voterId); }
+      else if(existing){ existing.choice=choice; existing.name=you.name; }
+      else { w.votes.push({id:you.voterId,name:you.name,choice}); }
+      saveLocalState(); renderGrid();
+    }
+    return;
+  }
+  if(toggleBtn){
+    const id=toggleBtn.dataset.id;
+    ui.expanded = ui.expanded===id? null : id;
+    renderGrid(); return;
+  }
+  if(commentBtn){
+    if(!ensureName()) return;
+    const id=commentBtn.dataset.id;
+    const text=(ui.commentDrafts[id]||'').trim();
+    if(!text) return;
+    if(USE_REMOTE){
+      await apiPost('comment',{wishId:id, name:you.name, text});
+      ui.commentDrafts[id]='';
+      await refresh();
+    } else {
+      const w=state.wishes.find(x=>x.id===id);
+      w.comments.push({id:uid('c'),name:you.name,text,createdAt:Date.now()});
+      ui.commentDrafts[id]='';
+      saveLocalState(); renderGrid();
+    }
+    return;
+  }
+});
+document.getElementById('wishGrid').addEventListener('input',e=>{
+  const t=e.target.closest('[data-action="draft"]'); if(!t) return;
+  ui.commentDrafts[t.dataset.id]=t.value;
+});
+document.getElementById('wishGrid').addEventListener('change', async e=>{
+  const t=e.target.closest('[data-action="status"]'); if(!t) return;
+  const id=t.dataset.id, status=t.value;
+  if(USE_REMOTE){
+    await apiPost('setStatus',{wishId:id, status});
+    await refresh();
+  } else {
+    const w=state.wishes.find(x=>x.id===id);
+    w.status=status; saveLocalState(); renderGrid();
+  }
+});
+
+refresh();
+</script>
