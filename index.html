@@ -190,7 +190,7 @@ label.field-label{display:block;font-size:12.5px;font-weight:700;color:var(--tex
 </style>
 
 <div class="page">
-  <div class="mode-banner" id="modeBanner"></div>
+  <div class="mode-banner" id="modeBanner" hidden></div>
 
   <header class="hero">
     <svg class="hero-ripple" viewBox="0 0 200 200" aria-hidden="true">
@@ -368,10 +368,10 @@ let apiError = false;
 function setModeBanner(){
   const el=document.getElementById('modeBanner');
   if(!USE_REMOTE){
-    el.className='mode-banner';
-    el.innerHTML='<span class="badge"><span class="dot"></span>瀏覽器示範模式</span><span>資料只存在你自己的瀏覽器,尚未連接 Google 試算表。設定好 apps-script/SETUP.md 後,把網址貼進 index.html 最上面的 API_URL 即可正式啟用。</span>';
+    el.hidden=true;
     return;
   }
+  el.hidden=false;
   if(apiError){
     el.className='mode-banner error';
     el.innerHTML='<span class="badge"><span class="dot error"></span>連線失敗</span><span>暫時無法連上 Google 試算表,請確認 Apps Script 部署為「任何人」都能存取,稍後會自動重試。</span>';
