@@ -335,51 +335,11 @@ function ensureName(){
   return true;
 }
 
-/* ---- 本機示範資料（尚未接上 Google 試算表時使用）---- */
+/* ---- 本機資料（尚未接上 Google 試算表時使用）---- */
 function seedLocalState(){
-  const day=864e5, now=Date.now();
   return {
     settings:{totalMembers:36, annualCap:20000},
-    wishes:[
-      {id:'w1', title:'羽球拍與羽球補貨', category:'耗材', proposerName:'林亭妤', reason:'社課用球拍老化、羽球消耗快,補齊公用裝備讓大家練球不斷手。',
-        items:[{name:'羽球拍（公用）',qty:4,unitPrice:450},{name:'羽球筒（12顆裝）',qty:6,unitPrice:280}],
-        receiptNote:'將於運動用品店現場開統編收據', status:'已核准', createdAt: now-9*day,
-        votes:[{id:'v1',name:'Emma',choice:'for'},{id:'v2',name:'阿凱',choice:'for'},{id:'v3',name:'柏宇',choice:'for'},{id:'v4',name:'詩涵',choice:'for'},{id:'v5',name:'庭安',choice:'for'}],
-        comments:[
-          {id:'c1',name:'社長 Emma',text:'需要的話我可以先墊,之後核銷。',createdAt:now-8*day},
-          {id:'c2',name:'財務 阿凱',text:'金額在額度內沒問題,附上估價單就能核准。',createdAt:now-8*day+3600000}
-        ]},
-      {id:'w2', title:'校外場地租借（9/20 友誼賽前練習）', category:'場地租借', proposerName:'陳柏宇', reason:'友誼賽對手場館較遠,想租借鄰近的振興體育館練習,方便社員賽前熱身。',
-        items:[{name:'場地租借（2小時）',qty:1,unitPrice:1500}],
-        receiptNote:'場館收據將於活動後由財務上傳', status:'討論中', createdAt: now-5*day,
-        votes:[{id:'v1',name:'詩涵',choice:'for'},{id:'v2',name:'宗翰',choice:'for'},{id:'v3',name:'庭安',choice:'for'}],
-        comments:[{id:'c1',name:'黃詩涵',text:'那天教室剛好也有借到,要不要比較一下兩邊場地？',createdAt:now-4*day}]},
-      {id:'w3', title:'直播用混音器一台', category:'大型設備', proposerName:'吳宗翰', reason:'社課直播常有雜音,添購混音器統一收音,之後也能留給下一屆社員使用。',
-        items:[{name:'USB 混音器',qty:1,unitPrice:6800}],
-        receiptNote:'已向店家詢價,可提供估價單', status:'討論中', createdAt: now-3*day,
-        votes:[
-          {id:'v1',name:'庭安',choice:'for'},{id:'v2',name:'亭妤',choice:'for'},{id:'v3',name:'柏宇',choice:'for'},{id:'v4',name:'詩涵',choice:'for'},
-          {id:'v5',name:'冠廷',choice:'for'},{id:'v6',name:'子晴',choice:'for'},{id:'v7',name:'俊彥',choice:'for'},{id:'v8',name:'佳蓉',choice:'for'},
-          {id:'v9',name:'志明',choice:'against'},{id:'v10',name:'雅婷',choice:'against'}
-        ],
-        comments:[
-          {id:'c1',name:'許庭安',text:'贊成,直播品質真的需要提升。',createdAt:now-2*day},
-          {id:'c2',name:'林亭妤',text:'單價超過 5,000,要走投票程序,我先幫忙統計人數。',createdAt:now-2*day+1800000}
-        ]},
-      {id:'w4', title:'邀請外聘教練指導 3 堂課', category:'指導費用', proposerName:'黃詩涵', reason:'期末友誼賽前想加強戰術,邀請合作已久的教練來上 3 堂進階課。',
-        items:[{name:'教練費（每堂）',qty:3,unitPrice:1500}],
-        receiptNote:'教練已開立收據,核銷完成', status:'已核銷', createdAt: now-20*day,
-        votes:[{id:'v1',name:'庭安',choice:'for'},{id:'v2',name:'亭妤',choice:'for'},{id:'v3',name:'柏宇',choice:'for'},{id:'v4',name:'宗翰',choice:'for'},{id:'v5',name:'子晴',choice:'for'},{id:'v6',name:'俊彥',choice:'for'}],
-        comments:[]},
-      {id:'w5', title:'跨校友誼賽報名費（兩隊）', category:'友誼賽', proposerName:'許庭安', reason:'與鄰校社團約定友誼賽,分甲、乙兩隊報名參賽。',
-        items:[{name:'報名費（每隊）',qty:2,unitPrice:400}],
-        receiptNote:'報名確認信可作為佐證', status:'許願中', createdAt: now-1*day,
-        votes:[{id:'v1',name:'亭妤',choice:'for'},{id:'v2',name:'詩涵',choice:'for'}], comments:[]},
-      {id:'w6', title:'場域受限交通費（練習場地往返）', category:'交通費', proposerName:'林亭妤', reason:'本學期借用的練習場地離校較遠,申請社員共乘往返的交通費,併入年度發展補助額度計算。',
-        items:[{name:'包車費（往返）',qty:1,unitPrice:600}],
-        receiptNote:'車行收據', status:'許願中', createdAt: now-12*3600000,
-        votes:[{id:'v1',name:'柏宇',choice:'for'}], comments:[]}
-    ]
+    wishes:[]
   };
 }
 function loadLocalState(){
